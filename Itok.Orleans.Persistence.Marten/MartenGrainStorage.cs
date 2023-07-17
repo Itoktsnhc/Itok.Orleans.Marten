@@ -39,7 +39,7 @@ public class MartenGrainStorage : IGrainStorage, ILifecycleParticipant<ISiloLife
         var id = grainReference.GrainIdentity.IdentityString;
         var container = await session.LoadAsync<MartenStoreContainer>(id);
         grainState.State = container != null
-            ? _mapper.Map(container.Data, grainState.State.GetType())
+            ? _mapper.Map(container.Data, grainState.State, container.Data.GetType(), grainState.State.GetType())
             : Activator.CreateInstance(grainState.State.GetType());
         grainState.ETag = container?.Version.ToString("N") ?? Guid.NewGuid().ToString("N");
         grainState.RecordExists = container != null;
@@ -53,7 +53,8 @@ public class MartenGrainStorage : IGrainStorage, ILifecycleParticipant<ISiloLife
         {
             Data = grainState,
             GrainType = grainType,
-            GrainRefId = id
+            GrainRefId = id,
+            Version = Guid.ParseExact(grainState.ETag, "N")
         };
         session.Store(entity);
         await session.SaveChangesAsync();

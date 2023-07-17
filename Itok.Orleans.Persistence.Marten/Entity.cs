@@ -1,4 +1,5 @@
-﻿using Marten;
+﻿using System.Dynamic;
+using Marten;
 using Marten.Metadata;
 using Marten.Schema;
 
