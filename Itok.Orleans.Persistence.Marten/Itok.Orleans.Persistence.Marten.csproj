@@ -1,15 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<Title>Orleans state persistence use martendb</Title>
+		<Authors>itoktsnhc@hotmail.com</Authors>
+		<Version>0.1.0</Version>
+		<Company>itoktsnhc@hotmail.com</Company>
+		<Description>Orleans state persistence use martendb</Description>
+		<PackageProjectUrl>https://github.com/Itoktsnhc/Itok.Orleans.Marten</PackageProjectUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageReadmeFile > ../README.md</PackageReadmeFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Mapster" Version="7.3.0" />
-    <PackageReference Include="Marten" Version="6.0.4" />
-    <PackageReference Include="Microsoft.Orleans.OrleansRuntime" Version="3.7.1" />
-  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Mapster" Version="7.3.0" />
+		<PackageReference Include="Marten" Version="6.0.4" />
+		<PackageReference Include="Microsoft.Orleans.OrleansRuntime" Version="3.7.1" />
+	</ItemGroup>
 
 </Project>
