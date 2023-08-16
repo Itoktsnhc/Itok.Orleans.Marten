@@ -37,12 +37,17 @@ public class MartenGrainStorage : IGrainStorage, ILifecycleParticipant<ISiloLife
     {
         await using var session = _store.Value.QuerySession();
         var id = grainReference.GrainIdentity.IdentityString;
-        var container = await session.LoadAsync<MartenStoreContainer>(id);
-        grainState.State = container != null
-            ? _mapper.Map(container.Data, grainState.State, container.Data.GetType(), grainState.State.GetType())
-            : Activator.CreateInstance(grainState.State.GetType());
-        grainState.ETag = container?.Version.ToString("N") ?? Guid.NewGuid().ToString("N");
-        grainState.RecordExists = container != null;
+        var containerObj = await session.LoadAsync<MartenStoreContainer>(id);
+        if (containerObj == null)
+        {
+            grainState.State = Activator.CreateInstance(grainState.State.GetType());
+        }
+        else
+        {
+            grainState.State = _mapper.Map(containerObj.Data, grainState.State);
+        }
+        grainState.ETag = containerObj?.Version.ToString("N") ?? Guid.NewGuid().ToString("N");
+        grainState.RecordExists = containerObj != null;
     }
 
     public async Task WriteStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
@@ -51,11 +56,12 @@ public class MartenGrainStorage : IGrainStorage, ILifecycleParticipant<ISiloLife
         var id = grainReference.GrainIdentity.IdentityString;
         var entity = new MartenStoreContainer()
         {
-            Data = grainState,
+            Data = grainState.State,
             GrainType = grainType,
             GrainRefId = id,
             Version = Guid.ParseExact(grainState.ETag, "N")
         };
+        grainState.RecordExists = true;
         session.Store(entity);
         await session.SaveChangesAsync();
         grainState.ETag = entity.Version.ToString("N");

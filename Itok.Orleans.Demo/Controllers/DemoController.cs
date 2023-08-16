@@ -3,42 +3,32 @@ using Orleans;
 
 namespace Itok.Orleans.Demo.Controllers;
 
-public class Dto
-{
-    public string State { get; set; }
-}
 
 [ApiController]
 [Route("[controller]")]
-public class DemoController : ControllerBase
+public class PersonController : ControllerBase
 {
-    private readonly ILogger<DemoController> _logger;
+    private readonly ILogger<PersonController> _logger;
     private readonly IClusterClient _client;
 
-    public DemoController(ILogger<DemoController> logger, IClusterClient client)
+    public PersonController(ILogger<PersonController> logger, IClusterClient client)
     {
         _logger = logger;
         _client = client;
     }
 
-    [HttpPost("state")]
-    public async Task<Dto> SaveStateAsync([FromBody] string state)
+    [HttpPost("{id:long}/name")]
+    public async Task<Person> SetNewPersonNameAsync([FromRoute] long id, [FromBody] string newPersonName)
     {
-        var stateGrain = _client.GetGrain<IStateGrain>(111);
-        await stateGrain.SaveStateAsync(state);
-        return new Dto()
-        {
-            State = state
-        };
+        var grain = _client.GetGrain<IWithStateGrain>(id);
+        await grain.InitialPersonAsync();
+        return await grain.ChangePersonNameAsync(newPersonName);
     }
 
-    [HttpGet("state")]
-    public async Task<Dto> ReadStateAsync()
+    [HttpGet("{id:long}")]
+    public async Task<Person> GetPersonAsync([FromRoute] long id)
     {
-        var stateGrain = _client.GetGrain<IStateGrain>(111);
-        return new Dto()
-        {
-            State = await stateGrain.ReadStateAsync()
-        };
+        var grain = _client.GetGrain<IWithStateGrain>(id);
+        return await grain.GetCurrentPersonAsync();
     }
 }
