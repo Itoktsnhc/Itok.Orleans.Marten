@@ -11,7 +11,16 @@
 		<Description>Orleans state persistence use martendb</Description>
 		<PackageProjectUrl>https://github.com/Itoktsnhc/Itok.Orleans.Marten</PackageProjectUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageReadmeFile > ../README.md</PackageReadmeFile>
+		<Copyright>itoktsnhc@hotmail.com</Copyright>
+		<PackageLicenseUrl>https://raw.githubusercontent.com/Itoktsnhc/Itok.Orleans.Marten/main/LICENSE</PackageLicenseUrl>
+		<RepositoryUrl>https://github.com/Itoktsnhc/Itok.Orleans.Marten</RepositoryUrl>
+		<PackageTags>Orleans</PackageTags>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<!-- If all members are not documented, you can disable the compiler warnings -->
+		<NoWarn>$(NoWarn);CS1591</NoWarn>
+		<Deterministic>true</Deterministic>
 	</PropertyGroup>
 
 
@@ -19,6 +28,10 @@
 		<PackageReference Include="Mapster" Version="7.3.0" />
 		<PackageReference Include="Marten" Version="6.0.4" />
 		<PackageReference Include="Microsoft.Orleans.OrleansRuntime" Version="3.7.1" />
+		<PackageReference Include="DotNet.ReproducibleBuilds" Version="1.1.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
 	</ItemGroup>
 
 </Project>
